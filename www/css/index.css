@@ -1,0 +1,366 @@
+.index{
+    display: none;
+}
+
+/* loader */
+
+@charset "UTF-8";
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #0C4475;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "微軟正黑體"; */
+}
+
+.monster {
+    width: 110px;
+    height: 110px;
+    background-color: #E55A54;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    margin: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    animation: jumping 0.8s infinite alternate;
+}
+
+.monster .eye {
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.monster .eyeball {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    background-color: #0C4475;
+}
+
+.monster .mouth {
+    width: 32%;
+    height: 12px;
+    border-radius: 12px;
+    background-color: white;
+    margin-top: 15%;
+}
+
+.monster:before,
+.monster:after {
+    content: "";
+    display: block;
+    width: 20%;
+    height: 10px;
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.monster:before {
+    transform: translateX(-70%) rotate(45deg);
+}
+
+.monster:after {
+    transform: translateX(-30%) rotate(-45deg);
+}
+
+.monster,
+.monster * {
+    transition: 0.5s;
+}
+
+.monster.blue {
+    background-color: #0C4475;
+    animation-delay: 0.5s;
+}
+
+.monster.blue .mouth,
+.monster.blue .eyeball {
+    background-color: #E55A54;
+}
+
+@keyframes jumping {
+    50% {
+        top: 0;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        top: -50px;
+        box-shadow: 0px 120px 50px rgba(0, 0, 0, 0.2);
+    }
+}
+
+@keyframes eyemove {
+    0%,
+    10% {
+        transform: translate(50%);
+    }
+    90%,
+    100% {
+        transform: translate(-50%);
+    }
+}
+
+.monster .eyeball {
+    animation: eyemove 1.6s infinite alternate;
+}
+
+h2 {
+    color: white;
+    font-size: 40px;
+    margin-right: 50px;
+}
+
+h3 {
+    margin-top: 0;
+    opacity: 0.5;
+    color: white;
+}
+
+.pageLoading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0C4475;
+    flex-direction: column;
+    transition: opacity 0.5s 0.5s;
+}
+
+.pageLoading.complete {
+    opacity: 0;
+}
+
+.pageLoading.complete .monster {
+    transform: scale(0.01) rotate(360deg);
+}
+
+.loading {
+    width: 200px;
+    height: 8px;
+    margin-top: 80px;
+    border-radius: 5px;
+    background-color: #fff;
+    overflow: hidden;
+    transition: 0.5s;
+}
+
+.loading .bar {
+    background-color: #E55A54;
+    width: 0%;
+    height: 100%;
+}
+
+
+
+@charset "UTF-8";
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Open Sans', Sans-Serif;
+    font-weight: 300;
+}
+
+/* body {
+    background: #2f313d;
+    overflow-x: hidden;
+} */
+
+.container {
+    /* display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center; */
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    /* -webkit-transform: scale(0.9);
+    transform: scale(0.9); */
+}
+
+.expenses {
+    background: -webkit-gradient(linear, left top, right bottom, from(#F44B68), to(#f34160));
+    background: linear-gradient(to bottom right, #F44B68, #f34160);
+    height: 100%;
+        width: 97%;
+        margin: auto;
+    -webkit-box-shadow: 5px 10px 15px #1f2129;
+    box-shadow: 5px 10px 15px #1f2129;
+    border-top-left-radius: 1.25rem;
+    border-bottom-right-radius: 1.25rem;
+}
+
+.expenseList {
+    background: white;
+    width: 100%;
+    height: 100%;
+    min-height: 15.625rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-bottom-right-radius: 1.25rem;
+}
+
+table {
+    padding: 30px 0;
+}
+
+table th,
+table tr,
+table td {
+    padding: 5px 0px;
+    width: 50%;
+    text-align: left;
+    font-size: 15px;
+    color: #3B3D4C;
+}
+
+table th {
+    font-weight: 400;
+}
+
+table #list:before {
+    content: '£';
+}
+
+input {
+    background: none;
+    border-right: 1px solid #f55974;
+    border-top: none;
+    border-left: none;
+    border-bottom: 1px solid #f55974;
+    outline: none;
+    inline: none;
+    color: #FFF;
+    width: 33.3%;
+    font-size: 15px;
+    padding: 30px 0;
+    text-align: center;
+    float: left;
+}
+
+::-webkit-input-placeholder {
+    color: #FFF;
+    -webkit-transition: all ease .25s;
+    transition: all ease .25s;
+}
+
+input:focus::-webkit-input-placeholder {
+    opacity: 0;
+}
+
+button {
+        background: #2f313d;
+        color: #FFF;
+        padding: 10px;
+        outline: none;
+        border: none;
+        inline: none;
+        text-align: center;
+        width: 12.5rem;
+        /* margin: 22.1875rem auto; */
+
+        /* left: 0; */
+
+        right: 0;
+        margin: 5px auto;
+        /* position: absolute; */
+
+        border-radius: 50px;
+        font-size: 15px;
+        cursor: pointer;
+}
+
+.total h1,
+.total h2 {
+    text-align: center;
+    margin: 0rem auto;
+    padding-top: 0px;
+    color: #FFF;
+    font-size: 22px;
+    font-weight: 400;
+}
+.total {
+    margin-top: 0.9375rem;
+        text-align: center;
+}
+.total h2 {
+    font-size: 25px;
+    padding: 30px;
+}
+
+.total h2:before {
+    content: '£';
+}
+
+.material-icons {
+    cursor: pointer;
+    -webkit-transition: all ease .25s;
+    transition: all ease .25s;
+}
+
+.material-icons:hover {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+@media screen and (max-width: 451px) {
+    .expenses {
+        height: 100%;
+    }
+    .expenseList {
+        min-height: 17.125rem;
+        /* max-height: 15.125rem; */
+    }
+    input:nth-of-type(1) {
+        width: 50%;
+    }
+    input:nth-of-type(2) {
+        width: 50%;
+    }
+    input:nth-of-type(3) {
+        width: 100%;
+    }
+}
+
+/* .morepadding{
+    padding-top: 15px;
+} */
+.index{
+    padding-top: 15px;
+}
+
+
+
+
+
+
+
+
+
