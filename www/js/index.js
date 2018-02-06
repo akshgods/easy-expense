@@ -38,17 +38,64 @@ var database = {
             console.log('Populated database OK');
         });
     },
-    selectAll: function () {
-        console.log('select all: ', db);
-
+    configInsert: function (budget, spend, month) {
         db.transaction(function (tx) {
-            tx.executeSql('SELECT * FROM expense', [], function (tx, results) {
-                // return results.rows;               
-                var len = results.rows.length,
-                    i;
+            var q = "UPDATE config SET budget = ? ,spend =? WHERE month = ?";
+            tx.executeSql('INSERT INTO config (budget,spend,month) VALUES (?,?,?)', [budget, spend,month]);
+        }, function (error) {
+            console.log('Transaction ERROR: ' + error.message);
+        }, function () {
+            console.log('config');
+        });
+
+    },
+    configUpdate: function (budget, spend, month) {
+        db.transaction(function (tx) {
+            var q = "UPDATE config SET budget = ? ,spend =? WHERE month = ?";
+            tx.executeSql(q, [budget, spend, month]);
+        }, function (error) {
+            console.log('Transaction ERROR: ' + error.message);
+        }, function () {
+            console.log('config');
+        });
+    }
+    ,
+    selectConfig: function (loadConfig) {
+        db.transaction(function (transaction) {
+            var result = [];
+            transaction.executeSql('SELECT * FROM config', [], function (tx, results) {
+                var len = results.rows.length,i;
                 for (i = 0; i < len; i++) {
-                    console.log(results.rows.item(i).log);
+                    result[i] = {
+                     id: results.rows.item(i).id,
+                        // expense_name: results.rows.item(i).expense_name,
+                        // price: results.rows.item(i).price,
+                        // date: results.rows.item(i).date,
+                    }
+                    console.log(results.rows.item(i).id);
                 }
+                loadConfig(result);
+            }, null);
+
+        });
+
+    }
+    ,
+    selectAll: function (showOldData) {
+        db.transaction(function (transaction) {
+            var result=[];
+            transaction.executeSql('SELECT * FROM expense', [], function (tx, results) {
+                var len = results.rows.length,i;
+                for (i = 0; i < len; i++) {
+                        result[i]={
+                            id: results.rows.item(i).id,
+                            expense_name: results.rows.item(i).expense_name,
+                            price: results.rows.item(i).price,
+                            date:results.rows.item(i).date,
+                        }
+                   console.log(results.rows.item(i).expense_name);
+                }
+                showOldData(result);
             }, null);
         });
     }
@@ -65,17 +112,29 @@ function makeDB() {
     }
     db.transaction(function (tx) {
         tx.executeSql('CREATE TABLE IF NOT EXISTS expense (id INTEGER PRIMARY KEY,expense_name, price , date DATE )');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY,budget,spend, month unique)');
     }, function (error) {
         console.log('Transaction ERROR: ' + error.message);
     }, function () {
         console.log('Populated database OK');
-        showOldData();
+        database.selectAll(showOldData);
+        database.selectConfig(loadConfig);
     });
 }
 
-function showOldData() {
-    var result = database.selectAll();
+function loadConfig(result) {
+    userFirstTime=0;
+    console.log(result);
+}
+function showOldData(result) {
+    var index,len,li='';
     console.log('result', result);
+    for (index = 0, len = result.length; index < len; ++index) {
+        console.log(result[index]);
+        li += "<tr>" + "<td id='name'>" + result[index].expense_name + "</td>" + "<td id='list'>" + result[index].price + "</td>" + "<td class='delete' value='" + result[index].price + "'>" + "<i class='material-icons'>highlight_off</i>" + "</td>" + "</tr>";
+    }
+     $("table").html(li);
+    $('#totalMonth').val('6000');
 }
 
 
@@ -135,7 +194,7 @@ function add() {
         alert("You must give an expense a price");
     } else {
         et = parseInt(et) + parseInt(ep);
-        $("table").append("<tr>" + "<td id='name'>" + en + "</td>" + "<td id='list'>" + ep + "</td>" + "<td id='delete' value='" + ep + "'>" + "<i class='material-icons'>highlight_off</i>" + "</td>" + "</tr>")
+        $("table").append("<tr>" + "<td id='name'>" + en + "</td>" + "<td id='list'>" + ep + "</td>" + "<td class='delete' value='" + ep + "'>" + "<i class='material-icons'>highlight_off</i>" + "</td>" + "</tr>")
         $("#expenseName, #expensePrice").val('');
         var text = 'Name: ' + en + ' Price: ' + ep;
         showNotification('Added Successfully', text);
@@ -147,6 +206,13 @@ function add() {
 function calculate() {
     var total = $("#totalMonth").val();
     output.html(total - et);
+    if (userFirstTime==1)
+    {
+    database.configUpdate(total, et, (new Date()).getMonth());
+    }
+    else{
+    database.configInsert(total, et, (new Date()).getMonth());
+    }
     console.log(total)
     console.log(et)
 }
@@ -175,12 +241,12 @@ $("input").keydown(function (event) {
 })
 
 // Delete function
-$(document).on('click', '#delete', function () {
+$(document).on('click', '.delete', function () {
     $(this).animate({
         opacity: 0
     }, 500, function () {
         $(this).parent().remove();
-        var r = $(this).attr('value')
+        var r = $(this).attr('value');
         et = et - r;
         calculate();
     })
