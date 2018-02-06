@@ -1,4 +1,5 @@
 
+var notification;
 var app = {
     // Application Constructor
     initialize: function() {
@@ -15,12 +16,11 @@ var app = {
         try {
             window.addEventListener('keyboardDidHide', keyboardClose);
             window.addEventListener('keyboardDidShow', keyboardOpen);
-            cordova.plugins.Keyboard.disableScroll(false);
-            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
+            notification = cordova.plugins.notification.local;
             if (cordova.platformId == 'android') {
                 StatusBar.backgroundColorByHexString("#A01536");
             }
-            console.log(navigator.vibrate);
+            
         } catch (err) {
             console.log(err);
         }
@@ -33,13 +33,10 @@ app.initialize();
 function keyboardOpen(e) {
     $(".index").addClass('morepadding');
     navigator.vibrate(20);
-// alert('show');
 }
 function keyboardClose() {
-    // alert("keybord close");
     navigator.vibrate(20);
     $(".index").removeClass('morepadding');
-    document.activeElement.blur();
 }
 
 
@@ -82,10 +79,11 @@ function add() {
     } else if ($("#expensePrice").val() <= 0) {
         alert("You must give an expense a price");
     } else {
-        Keyboard.hide();
         et = parseInt(et) + parseInt(ep);
         $("table").append("<tr>" + "<td id='name'>" + en + "</td>" + "<td id='list'>" + ep + "</td>" + "<td id='delete' value='" + ep + "'>" + "<i class='material-icons'>highlight_off</i>" + "</td>" + "</tr>")
         $("#expenseName, #expensePrice").val('');
+        var text = 'Name: ' + en +' Price: '+ep;
+        showNotification('Added Successfully',text);
     }
 }
 
@@ -106,9 +104,8 @@ $('#totalMonth').keyup(function () {
 $('#add').on('click', function () {
     add();
     calculate();
-
     // Focus on expense name field
-    $("#expenseName").focus();
+    // $("#expenseName").focus();
 })
 
 // Keyboard event
@@ -118,7 +115,7 @@ $("input").keydown(function (event) {
         calculate();
 
         // Focus on expense name field
-        $("#expenseName").focus();
+        // $("#expenseName").focus();
     }
 })
 
@@ -133,3 +130,12 @@ $(document).on('click', '#delete', function () {
         calculate();
     })
 })
+
+function showNotification(title,msg) { 
+    notification.schedule({
+                id:1,
+                title: title,
+                text: msg,
+                foreground: true
+            });
+ }

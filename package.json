@@ -12,7 +12,10 @@
   "dependencies": {
     "cordova-android": "^7.0.0",
     "cordova-browser": "^5.0.3",
-    "cordova-plugin-ionic-keyboard": "^2.0.5",
+    "cordova-plugin-badge": "^0.8.7",
+    "cordova-plugin-device": "^2.0.1",
+    "cordova-plugin-keyboard": "^1.2.0",
+    "cordova-plugin-local-notification": "git+https://github.com/katzer/cordova-plugin-local-notifications.git",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.1",
     "cordova-plugin-vibration": "^3.0.1",
@@ -23,10 +26,11 @@
     "plugins": {
       "cordova-sqlite-storage": {},
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-vibration": {},
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-local-notification": {},
+      "cordova-plugin-keyboard": {}
     },
     "platforms": [
       "android",
