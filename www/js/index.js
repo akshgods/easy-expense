@@ -17,7 +17,10 @@ var app = {
             window.addEventListener('keyboardDidShow', keyboardOpen);
             cordova.plugins.Keyboard.disableScroll(false);
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-            
+            if (cordova.platformId == 'android') {
+                StatusBar.backgroundColorByHexString("#A01536");
+            }
+            console.log(navigator.vibrate);
         } catch (err) {
             console.log(err);
         }
@@ -29,11 +32,14 @@ app.initialize();
 
 function keyboardOpen(e) {
     $(".index").addClass('morepadding');
+    navigator.vibrate(20);
 // alert('show');
 }
 function keyboardClose() {
     // alert("keybord close");
+    navigator.vibrate(20);
     $(".index").removeClass('morepadding');
+    document.activeElement.blur();
 }
 
 
@@ -76,6 +82,7 @@ function add() {
     } else if ($("#expensePrice").val() <= 0) {
         alert("You must give an expense a price");
     } else {
+        Keyboard.hide();
         et = parseInt(et) + parseInt(ep);
         $("table").append("<tr>" + "<td id='name'>" + en + "</td>" + "<td id='list'>" + ep + "</td>" + "<td id='delete' value='" + ep + "'>" + "<i class='material-icons'>highlight_off</i>" + "</td>" + "</tr>")
         $("#expenseName, #expensePrice").val('');
